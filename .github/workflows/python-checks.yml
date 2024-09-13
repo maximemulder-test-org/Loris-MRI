@@ -57,7 +57,7 @@ jobs:
           path: /tmp
   
       - name: Load Docker image
-        run: docker load -i ./tmp/loris-python-${{ matrix.python-version }}.tar
+        run: docker load -i /tmp/loris-python-${{ matrix.python-version }}.tar
 
       - name: Run Ruff
         run: |
