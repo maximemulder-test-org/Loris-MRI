@@ -29,13 +29,13 @@ jobs:
             WORKSPACE=/__w/Loris-MRI/Loris-MRI
           cache-from: type=gha,scope=loris-python-${{ matrix.python-version }}
           cache-to: type=gha,scope=loris-python-${{ matrix.python-version }}
-          outputs: type=docker,dest=/tmp/loris-python:${{ matrix.python-version }}.tar
+          outputs: type=docker,dest=/tmp/loris-python-${{ matrix.python-version }}.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: loris-python:${{ matrix.python-version }}
-          path: /tmp/loris-python:${{ matrix.python-version }}.tar
+          name: loris-pythonè${{ matrix.python-version }}
+          path: /tmp/loris-python-${{ matrix.python-version }}.tar
   
   ruff:
     name: Ruff
@@ -53,7 +53,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: loris-python:${{ matrix.python-version }}
+          name: loris-python-${{ matrix.python-version }}
           path: /tmp
       
       - name: Checkout LORIS-MRI
@@ -61,7 +61,7 @@ jobs:
   
       - name: Load image
         run: |
-          docker load --input /tmp/loris-python:${{ matrix.python-version }}.tar
+          docker load --input /tmp/loris-python-${{ matrix.python-version }}.tar
           docker image ls -a
   #     - name: Run Ruff
   #       run: ruff check --output-format=github
