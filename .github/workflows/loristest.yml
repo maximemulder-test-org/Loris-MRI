@@ -1,8 +1,6 @@
 name: LORIS Test Suite
 
-on:
-  - push
-  - pull_request
+on: workflow_dispatch
 
 jobs:
   docker:
@@ -11,7 +9,7 @@ jobs:
         fail-fast: false
         matrix:
             testsuite: ['integration']
-            php: ['8.1','8.2', '8.3']
+            php: ['8.3']
             ci_node_index: [0]
 
             include:
@@ -33,7 +31,9 @@ jobs:
     - name: Override Test Files
       run: |
         cp test/Dockerfile.test.php8 Loris/
+        cp test/Dockerfile.test.python Loris/
         cp test/docker-compose.yml Loris/
+        cp test/test_example.py Loris/test
         cp test/phpunit.xml Loris/test/
         cp test/RB_SQL/* Loris/raisinbread/RB_files/
 
@@ -90,3 +90,9 @@ jobs:
           CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
           # Use the index from matrix as an environment variable
           CI_NODE_INDEX: ${{ matrix.ci_node_index }}
+
+
+    - name: Build and run Docker Compose
+      run: |
+        cd Loris
+        docker compose run -T --rm pytest pytest
