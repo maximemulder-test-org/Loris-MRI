@@ -89,9 +89,9 @@ jobs:
 
     - name: Run Pyright
       run: |
-        docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} \
-          set -o pipefail && \
-          pyright --outputjson | bash test/pyright_to_github.sh
+        docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} "
+          set -o pipefail &&
+          pyright --outputjson | bash test/pyright_to_github.sh"
 
   pyrigh-global:
     name: Pyright global
@@ -117,7 +117,7 @@ jobs:
 
       - name: Run Pyright
         run: |
-          docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} \
-            cd test && \
-            set -o pipefail && \
-            pyright --outputjson | bash test/pyright_to_github.sh
+          docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} "
+            cd test &&
+            set -o pipefail &&
+            pyright --outputjson | bash test/pyright_to_github.sh"
