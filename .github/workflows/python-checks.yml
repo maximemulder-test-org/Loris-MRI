@@ -4,10 +4,6 @@ on: pull_request
 
 jobs:
   docker:
-    permissions:
-      contents: read
-      packages: write
-
     name: Docker
     runs-on: ubuntu-latest
 
@@ -39,9 +35,9 @@ jobs:
             WORKSPACE=/__w/Loris-MRI/Loris-MRI
           push: true
           # TODO: Add the `requirements.txt` hash to the image path
-          tags: ghcr.io/${{ github.repository_owner }}/python:${{ matrix.python-version }}
-          cache-from: type=gha,scope=build-python-${{ matrix.python-version }}
-          cache-to: type=gha,scope=build-python-${{ matrix.python-version }}
+          tags: ghcr.io/${{ github.actor }}/loris-python:${{ matrix.python-version }}
+          cache-from: type=gha,scope=build-loris-python-${{ matrix.python-version }}
+          cache-to: type=gha,scope=build-loris-python-${{ matrix.python-version }}
 
   ruff:
     name: Ruff
@@ -53,7 +49,7 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     container:
-      image: ghcr.io/${{ github.repository_owner }}/python:${{ matrix.python-version }}
+      image: ghcr.io/${{ github.actor }}/python:${{ matrix.python-version }}
 
     steps:
       - name: Checkout LORIS-MRI
@@ -72,7 +68,7 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     container:
-      image: ghcr.io/${{ github.repository_owner }}/python:${{ matrix.python-version }}
+      image: ghcr.io/${{ github.actor }}/python:${{ matrix.python-version }}
 
     steps:
     - name: Check out LORIS-MRI
@@ -95,7 +91,7 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     container:
-      image: ghcr.io/${{ github.repository_owner }}/python:${{ matrix.python-version }}
+      image: ghcr.io/${{ github.actor }}/python:${{ matrix.python-version }}
 
     steps:
     - name: Check out LORIS-MRI
