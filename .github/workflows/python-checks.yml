@@ -27,6 +27,7 @@ jobs:
           build-args: |
             PYTHON_VERSION=${{ matrix.python-version }}
             WORKSPACE=/__w/Loris-MRI/Loris-MRI
+          tags: loris-python:${{ matrix.python-version }}
           cache-from: type=gha,scope=loris-python-${{ matrix.python-version }}
           cache-to: type=gha,scope=loris-python-${{ matrix.python-version }}
           outputs: type=docker,dest=/tmp/loris-python-${{ matrix.python-version }}.tar
@@ -47,21 +48,21 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     steps:
-      - name: Checkout LORIS-MRI
-        uses: actions/checkout@v4
-
       - name: Download Docker image
         uses: actions/download-artifact@v4
         with:
           name: loris-python-${{ matrix.python-version }}
           path: /tmp
   
+      - name: Checkout LORIS-MRI
+        uses: actions/checkout@v4
+
       - name: Load Docker image
         run: docker load -i /tmp/loris-python-${{ matrix.python-version }}.tar
 
       - name: Run Ruff
         run: |
-          docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python-${{ matrix.python-version }} bash -c \
+          docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} bash -c \
             "ruff check --output-format=github"
 
 #      - name: Load image
