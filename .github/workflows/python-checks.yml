@@ -6,10 +6,6 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
-    
-    permissions:
-      packages: write
-      contents: read
 
     strategy:
       matrix:
