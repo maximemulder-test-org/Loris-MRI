@@ -12,13 +12,13 @@ jobs:
         python-version: ["3.11", "3.12"]
 
     steps:
-      - name: Check out the repository
+      - name: Check out LORIS-MRI
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         id: build-and-push
         uses: docker/build-push-action@v4
         with:
@@ -31,7 +31,7 @@ jobs:
           cache-to: type=gha,scope=loris-python-${{ matrix.python-version }}
           outputs: type=docker,dest=/tmp/loris-python-${{ matrix.python-version }}.tar
 
-      - name: Upload artifact
+      - name: Upload Docker image
         uses: actions/upload-artifact@v4
         with:
           name: loris-python-${{ matrix.python-version }}
@@ -46,23 +46,28 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12"]
 
-  #   container:
-  #     image: ghcr.io/${{ github.actor }}/python:${{ matrix.python-version }}
-
     steps:
-      - name: Download artifact
+      - name: Checkout LORIS-MRI
+        uses: actions/checkout@v4
+
+      - name: Download Docker image
         uses: actions/download-artifact@v4
         with:
           name: loris-python-${{ matrix.python-version }}
           path: /tmp
-      
-      - name: Checkout LORIS-MRI
-        uses: actions/checkout@v4
   
-      - name: Load image
+      - name: Load Docker image
+        run: docker load -i ./tmp/loris-python-${{ matrix.python-version }}.tar
+
+      - name: Run Ruff
         run: |
-          docker load --input /tmp/loris-python-${{ matrix.python-version }}.tar
-          docker image ls -a
+          docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python-${{ matrix.python-version }} bash -c \
+            "ruff check --output-format=github"
+
+#      - name: Load image
+#        run: |
+#          docker load --input /tmp/loris-python-${{ matrix.python-version }}.tar
+#          docker image ls -a
   #     - name: Run Ruff
   #       run: ruff check --output-format=github
 
