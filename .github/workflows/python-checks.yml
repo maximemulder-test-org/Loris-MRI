@@ -4,6 +4,10 @@ on: pull_request
 
 jobs:
   docker:
+    permissions:
+      contents: read
+      packages: write
+
     name: Docker
     runs-on: ubuntu-latest
 
