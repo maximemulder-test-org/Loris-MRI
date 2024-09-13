@@ -117,4 +117,4 @@ jobs:
       - name: Run Pyright
         run: |
           docker run -v ${{ github.workspace }}:/workspace -w /workspace loris-python:${{ matrix.python-version }} bash -c \
-            "cd test && et -o pipefail && pyright --outputjson | bash test/pyright_to_github.sh"
+            "cd test && set -o pipefail && pyright --outputjson | bash test/pyright_to_github.sh"
