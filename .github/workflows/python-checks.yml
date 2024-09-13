@@ -34,7 +34,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: loris-pythonè${{ matrix.python-version }}
+          name: loris-python-${{ matrix.python-version }}
           path: /tmp/loris-python-${{ matrix.python-version }}.tar
   
   ruff:
