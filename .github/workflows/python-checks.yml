@@ -6,10 +6,6 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
-    
-    permissions:
-      packages: write
-      contents: read
 
     strategy:
       matrix:
@@ -26,7 +22,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
